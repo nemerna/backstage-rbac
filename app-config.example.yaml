@@ -1,0 +1,100 @@
+app:
+  title: Janus IDP Backstage Showcase
+  baseUrl: http://localhost:3000
+  analytics:
+    segment:
+      testMode: true
+      writeKey: temp
+
+organization:
+  name: My Org
+
+backend:
+  auth:
+    keys:
+      - secret: temp
+  baseUrl: http://localhost:7007
+  listen:
+    port: 7007
+  csp:
+    connect-src:
+      - "'self'"
+      - 'http:'
+      - 'https:'
+  cors:
+    origin: http://localhost:3000
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  database:
+    client: better-sqlite3
+    connection: ':memory:'
+
+proxy:
+  skipInvalidProxies: true
+  endpoints: {}
+
+integrations:
+  github:
+    - host: github.com
+      # This is a GitHub App. You can find out how to generate this file, and more information
+      # about setting up the GitHub integration here: https://backstage.io/docs/integrations/github/github-apps
+      apps:
+        - appId: 1
+          webhookUrl: temp
+          clientId: temp
+          clientSecret: temp
+          webhookSecret: temp
+          privateKey: |
+            temp
+
+  bitbucketServer:
+    - host: bitbucket.com
+      apiBaseUrl: temp
+      username: temp
+      password: temp
+  gitlab:
+    - host: gitlab.com
+      token: temp
+
+argocd:
+  appLocatorMethods:
+    - type: 'config'
+      instances:
+        - name: argoInstance1
+          url: temp
+          token: temp
+        - name: argoInstance2
+          url: temp
+          token: temp
+
+auth:
+  environment: development
+  providers:
+    github:
+      development:
+        clientId: temp
+        clientSecret: temp
+
+techdocs:
+  builder: external
+  generator:
+    runIn: local
+  publisher:
+    type: awsS3
+
+lighthouse:
+  baseUrl: temp
+
+dynatrace:
+  baseUrl: temp
+
+catalog:
+  import:
+    entityFilename: catalog-info.yaml
+    pullRequestBranchName: backstage-integration
+  rules:
+    - allow: [Component, System, Group, Resource, Location, Template, API]
+  locations:
+    # Note: integrations.github[].apps must be correctly configured to read GitHub locations
+    - type: file
+      target: ../../catalog-entities/all.yaml

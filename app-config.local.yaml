@@ -1,0 +1,104 @@
+app:
+  title: Janus IDP Backstage Showcase
+  baseUrl: http://localhost:3000
+  analytics:
+    segment:
+      testMode: true
+      writeKey: temp
+
+organization:
+  name: My Org
+
+backend:
+  auth:
+    keys:
+      - secret: Q3Oe9k3r0U6infzUk31xHOoWxKNyIZzp
+  baseUrl: http://localhost:7007
+  listen:
+    port: 7007
+  csp:
+    connect-src:
+      - "'self'"
+      - 'http:'
+  database:
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+  cors:
+    origin: "http://localhost:3000"
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+    database:
+      connection:
+        password: ${POSTGRESQL_ADMIN_PASSWORD}
+        user: postgres
+
+proxy:
+  skipInvalidProxies: true
+  endpoints: {}
+integrations:
+  github:
+    - host: github.com
+      # This is a GitHub App. You can find out how to generate this file, and more information
+      # about setting up the GitHub int
+      apps:
+        - appId: 1
+          webhookUrl: temp
+          clientId: temp
+          clientSecret: temp
+          webhookSecret: temp
+          privateKey: |
+            temp
+
+  bitbucketServer:
+    - host: bitbucket.com
+      apiBaseUrl: temp
+      username: temp
+      password: temp
+  gitlab:
+    - host: gitlab.com
+      token: temp
+
+argocd:
+  appLocatorMethods:
+    - type: 'config'
+      instances:
+        - name: argoInstance1
+          url: temp
+          token: temp
+        - name: argoInstance2
+          url: temp
+          token: temp
+
+auth:
+  environment: development
+  providers:
+    github:
+      development:
+        clientId: $PLACEHOLDER_GITHUB_CLIENT_ID
+        clientSecret: $PLACEHOLDER_GITHUB_CLIENT_SECRET
+
+catalog:
+  import:
+    entityFilename: catalog-info.yaml
+    pullRequestBranchName: backstage-integration
+  rules:
+    - allow: [Component, System, Group, Resource, Location, Template, API, User]
+  locations:
+    # Note: integrations.github[].apps must be correctly configured to read GitHub locations
+    - type: file
+      target: ../../catalog-entities/all.yaml
+    - type: file
+      target: ../../catalog-entities/user.yaml
+
+permission:
+  enabled: true
+  rbac:
+    admin:
+      users:
+        - name: $PLACEHOLDER_RBAC_ADMIN_USERNAME
+    database:
+      enabled: true
